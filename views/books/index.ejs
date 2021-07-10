@@ -20,6 +20,7 @@
                     <th scope="col">#</th>
                     <th scope="col">Name</th>
                     <th scope="col">Author</th>
+                    <th scope="col">Description</th>
                     <th width="200px">Action</th>
                 </tr>
             </thead>
@@ -29,6 +30,8 @@
                     <th scope="row"><%= (i+1) %></th>
                     <td><%= data[i].name%></td>
                     <td><%= data[i].author%></td>
+                    <td><%= data[i].Description%></td>
+
                     <td>
                         <a class="btn btn-success edit" href="../books/edit/<%=data[i].id%>">Edit</a>                       
                         <a class="btn btn-danger delete" onclick="return alert('Are You sure?')" href="../books/delete/<%=data[i].id%>">Delete</a>                       

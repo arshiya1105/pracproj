@@ -9,6 +9,8 @@ var mysql = require('mysql');
 var connection  = require('./lib/db');
 
 var booksRouter = require('./routes/books');
+var studentRouter = require('./routes/student');
+
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -39,6 +41,7 @@ app.use('/users', usersRouter);
 app.use(flash());
 
 app.use('/books', booksRouter);
+app.use('/student', studentRouter);
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));

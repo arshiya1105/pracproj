@@ -1,0 +1,57 @@
+<%- include ../partials/header.ejs %>
+
+<div class="card"> 
+    <div class="card-header">
+        <ul class="nav nav-pills w-100">
+            <li class="nav-pill active">
+                <a class="nav-link">StudentsDetails</a>
+            </li>
+            <li class="nav-pill ml-auto">
+                <a class="nav-link active" href="/student/sadd">Add student</a>
+            </li>
+        </ul>
+    </div>
+<div class="card-body">
+    
+    <% if(data.length) { %>
+    <table class="table ">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">FirstName</th>
+                <th scope="col">LasttName</th>
+                <th scope="col">ParentName</th>
+                <th scope="col">Email</th>
+                <th scope="col">PhoneNumber</th>
+                <th width="250px">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+        <% for(var i = 0; i< data.length; i++) { %>
+            <tr>
+                <th scope="row"><%= (i+1) %></th>
+                <td><%= data[i].FirstName%></td>
+                <td><%= data[i].LasttName%></td>
+                <td><%= data[i].ParentName%></td>
+                <td><%= data[i].Email%></td>
+                <td><%= data[i].PhoneNumber%></td>
+              <td>
+                    <a class="btn btn-success edit" href="../student/sedit/<%=data[i].id%>">Edit</a>                       
+                    <a class="btn btn-danger delete" onclick="return alert('Are You sure?')" href="../student/delete/<%=data[i].id%>">Delete</a>                       
+                </td>
+            </tr>
+        <% } %>
+        </tbody>
+    </table>
+    <% } %>
+    
+    <!-- if result is empty -->
+    <% if(!data.length) { %>
+        <p class="text-center">No student detail found!</p>
+    <% } %>
+
+    </div>
+</div>
+
+</body>
+</html>

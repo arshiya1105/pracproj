@@ -17,7 +17,8 @@ router.get('/add', function(req, res, next) {
     
     res.render('books/add', {
         name: '',
-        author: ''        
+        author: '' ,
+        Description:''       
     })
 })
 
@@ -35,7 +36,8 @@ router.post('/add', function(req, res, next) {
         // render to add.ejs with flash message
         res.render('books/add', {
             name: req.body.name,
-            author:  req.body.author
+            author:  req.body.author,
+            desc:req.body.Description
         })
     }
     if(!errors) {
@@ -48,7 +50,8 @@ router.post('/add', function(req, res, next) {
 
         dbConn.query('INSERT INTO books SET ?',  {
             name: req.body.name,
-            author:  req.body.author
+            author:  req.body.author,
+            Description:req.body.Description
         }, function(err, result) {
             //if(err) throw err
             if (err) {
@@ -57,7 +60,8 @@ router.post('/add', function(req, res, next) {
                 // render to add.ejs
                 res.render('books/add', {
                     name: req.body.name,
-                    author:  req.body.author                   
+                    author:  req.body.author,
+                    Description:req.body.Description                   
                 })
             } else {                
                 req.flash('success', 'Book successfully added');
