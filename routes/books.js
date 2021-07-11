@@ -1,6 +1,8 @@
 var express = require('express');
 var router = express.Router();
 var dbConn  = require('../lib/db');
+const { check, validationResult } = require('express-validator/check');
+
 
 router.get('/', function(req, res, next) {
     dbConn.query('SELECT * FROM books ORDER BY ID desc ', function(err,rows){
@@ -21,55 +23,109 @@ router.get('/add', function(req, res, next) {
         Description:''       
     })
 })
+// router.post('/add', function(req, res, next) {    
 
-router.post('/add', function(req, res, next) {    
+//     let name = req.body.name;
+//     let author = req.body.author;
+//     let Description = req.body.Description;
 
-    // let name = req.body.name;
-    // let author = req.body.author;
-    let errors = false;
+//     let errors = false;
 
-    if(req.body.name.length === 0 ||  req.body.author.length === 0) {
-        errors = true;
+//     if(name.length === 0 || author.length === 0) {
+//         errors = true;
 
-        // set flash message
-        req.flash('error', "Please enter name and author");
-        // render to add.ejs with flash message
-        res.render('books/add', {
-            name: req.body.name,
-            author:  req.body.author,
-            desc:req.body.Description
-        })
-    }
-    if(!errors) {
+//         // set flash message
+//         req.flash('error', "Please enter name and author");
+//         // render to add.ejs with flash message
+//         res.render('books/add', {
+//             name: name,
+//             author: author,
+//             Description:Description
+//         })
+//     }
 
-        // var form_data = {
-        //     name: req.body.name,
-        //     author:  req.body.author
-        // }
+//     // if no error
+//     if(!errors) {
+
+//         var form_data = {
+//             name: name,
+//             author: author,
+//             Description:Description
+//         }
         
-
-        dbConn.query('INSERT INTO books SET ?',  {
-            name: req.body.name,
-            author:  req.body.author,
-            Description:req.body.Description
-        }, function(err, result) {
-            //if(err) throw err
-            if (err) {
-                req.flash('error', err)
+//         // insert query
+//         dbConn.query('INSERT INTO books SET ?', form_data, function(err, result) {
+//             //if(err) throw err
+//             if (err) {
+//                 req.flash('error', err)
                  
-                // render to add.ejs
-                res.render('books/add', {
-                    name: req.body.name,
-                    author:  req.body.author,
-                    Description:req.body.Description                   
-                })
-            } else {                
-                req.flash('success', 'Book successfully added');
-                res.redirect('/books');
-            }
-        })
-    }
-})
+//                 // render to add.ejs
+//                 res.render('books/add', {
+//                     name: form_data.name,
+//                     author: form_data.author,
+//                     Description:form_data.Description                   
+//                 })
+//             } else {                
+//                 req.flash('success', 'Book successfully added');
+//                 res.redirect('/books');
+//             }
+//         })
+//     }
+// })
+
+router.post('/add',
+    [
+        check('name').not().isEmpty().withMessage('Name field requeried'),
+        check('author', 'author value must be neaded').not().isEmpty(),
+        check('Description').not().isEmpty().isLength({min: 5}).withMessage('Name must have more than 5 characters'),
+
+    ],
+ 
+  function (req, res) {
+    const errors = validationResult(req);
+  
+        if (!errors.isEmpty()) {
+
+            req.flash('error',  errors.array());
+            // render to add.ejs with flash message
+            res.render('books/add', {
+                name: req.body.name,
+                author: req.body.author,
+                Description:req.body.Description
+            })
+
+           
+          }else{
+            var form_data = {
+                        name: req.body.name,
+                        author: req.body.author,
+                        Description:req.body.Description
+                        }
+                        
+                        // insert query
+                        dbConn.query('INSERT INTO books SET ?', form_data, function(err, result) {
+                            //if(err) throw err
+                            if (err) {
+                                req.flash('error', err)
+                                 
+                                // render to add.ejs
+                                res.render('books/add', {
+                                    name: form_data.name,
+                                    author: form_data.author,
+                                    Description:form_data.Description                   
+                                })
+                            } else {                
+                                req.flash('success', 'Book successfully added');
+                                res.redirect('/books');
+                            }
+                        })
+          }
+   
+
+
+
+  });
+
 
 router.get('/edit/(:id)', function(req, res, next) {
 

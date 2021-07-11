@@ -13,5 +13,5 @@
     <% } %>
 
     <% if (messages.error) { %>
-    <div class="alert alert-danger" role="alert"><%- messages.error %></div>
+    <div class="alert alert-danger" role="alert"><%- JSON.stringify(messages.error)  %></div>
     <% } %>
